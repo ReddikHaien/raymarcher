@@ -11,7 +11,7 @@ pub mod methods;
 pub mod scene;
 pub mod algorithms;
 
-pub struct Renderer<S: Scene, R: RayMarcherBackend, A: App>{
+pub struct Renderer<S: Scene, R: RayMarcherBackend, A: App<S, R>>{
     registered_bounding_methods: Vec<(String,DataDeserializer)>,
     registered_sdf_methods: Vec<(String,DataDeserializer)>,
     registered_tex_methods: Vec<(String,DataDeserializer)>,
@@ -24,7 +24,7 @@ pub struct Renderer<S: Scene, R: RayMarcherBackend, A: App>{
     app: MaybeUninit<A>
 }
 
-impl<S: Scene, R: RayMarcherBackend, A: App> Renderer<S, R, A> {
+impl<S: Scene, R: RayMarcherBackend, A: App<S, R>> Renderer<S, R, A> {
     pub fn new(ctx: &mut Context,scene: S, mut app: A) -> Self
     {
         let mut x = Self{
@@ -179,7 +179,7 @@ impl<S: Scene, R: RayMarcherBackend, A: App> Renderer<S, R, A> {
 }
 
 
-impl<T: Scene, R: RayMarcherBackend, A: App> EventHandler for Renderer<T, R, A>{
+impl<T: Scene, R: RayMarcherBackend, A: App<T, R>> EventHandler for Renderer<T, R, A>{
     fn update(&mut self, _ctx: &mut miniquad::Context) {
         unsafe{
             let app = self.app.assume_init_mut();
@@ -216,10 +216,10 @@ impl<T: Scene, R: RayMarcherBackend, A: App> EventHandler for Renderer<T, R, A>{
     }
 }
 
-pub trait App {
-    fn init<S: Scene, B: RayMarcherBackend>(&mut self, renderer: &mut Renderer<S, B, Self>)
+pub trait App<S: Scene, B: RayMarcherBackend> {
+    fn init(&mut self, renderer: &mut Renderer<S, B, Self>)
         where Self: Sized;
-    fn update<S: Scene, B: RayMarcherBackend>(&mut self,scene: &mut S, backend: &mut B);
+    fn update(&mut self,scene: &mut S, backend: &mut B);
 
     fn key_down_event(&mut self, _ctx: &mut Context, _keycode: miniquad::KeyCode, _keymods: miniquad::KeyMods, _repeat: bool) {
         

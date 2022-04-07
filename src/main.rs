@@ -63,8 +63,8 @@ struct Logic{
     rotation: [f32;4],
 }
 
-impl App for Logic{
-    fn init<S: Scene, B: miniquad_raytrace::renderer::algorithms::RayMarcherBackend>(&mut self, renderer: &mut Renderer<S, B, Self>)
+impl<B: RayMarcherBackend> App<SimpleScene, B> for Logic{
+    fn init(&mut self, renderer: &mut Renderer<SimpleScene, B, Self>)
         where Self: Sized {
             renderer.add_methods(MethodDefinition::File(PathBuf::from_str("./sdf/plane.glsl").unwrap()));
             renderer.add_methods(MethodDefinition::File(PathBuf::from_str("./sdf/sphere.glsl").unwrap()));
@@ -108,7 +108,7 @@ impl App for Logic{
             });
     }
 
-    fn update<S: Scene,B: RayMarcherBackend>(&mut self,scene: &mut S, backend: &mut B) {
+    fn update(&mut self,scene: &mut SimpleScene, backend: &mut B) {
         if self.key_map.contains(&KeyCode::W){
             self.position[2] += 0.01;
         }
