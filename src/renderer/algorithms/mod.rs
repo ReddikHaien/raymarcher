@@ -3,6 +3,8 @@ use miniquad::Context;
 pub use scaled_estimate_backend::*;
 pub use full_size_backend::*;
 
+use super::MAX_ROM_SIZE;
+
 mod scaled_estimate_backend;
 mod full_size_backend;
 pub trait RayMarcherBackend{
@@ -22,7 +24,7 @@ struct SceneUniformShader{
     pub elapsed_time: f32,
     pub position: [f32;3],
     pub rotation: [f32;4],
-    pub scene_rom: [u32;1024]
+    pub scene_rom: [u32;MAX_ROM_SIZE]
 }
 
 impl SceneUniformShader{
@@ -32,7 +34,7 @@ impl SceneUniformShader{
             fov_y: 1.0,
             position: [0.0,0.0,0.0],
             rotation: [0.0,0.0,0.0,1.0],
-            scene_rom: [0;1024]
+            scene_rom: [0;MAX_ROM_SIZE]
         }
     }
 }

@@ -1,5 +1,7 @@
 use miniquad::{Pipeline, Bindings, RenderPass, Context, BufferType, Buffer, Shader, UniformBlockLayout, UniformDesc, BufferLayout, VertexAttribute, VertexFormat, Texture, TextureParams, FilterMode, UniformType, ShaderMeta, PassAction};
 
+use crate::renderer::MAX_ROM_SIZE;
+
 use super::{SceneUniformShader, RayMarcherBackend, VERTS, INDICES};
 
 const VERTEX_SHADER: &'static str = 
@@ -170,7 +172,7 @@ impl RayMarcherBackend for ScaledEstimateBackend{
                     UniformDesc::new("elapsed_time", UniformType::Float1),
                     UniformDesc::new("position", UniformType::Float3),
                     UniformDesc::new("rotation", UniformType::Float4),
-                    UniformDesc::new("scene_rom", UniformType::Int1).array(1024)
+                    UniformDesc::new("scene_rom", UniformType::Int1).array(MAX_ROM_SIZE)
                 ],
             }
         }).unwrap_or_else(|e| panic!("Failed to compile scene shader: {}",e));
@@ -205,7 +207,7 @@ impl RayMarcherBackend for ScaledEstimateBackend{
                 elapsed_time: 0.0,
                 position: [0.0,0.0,0.0],
                 rotation: [0.0,0.0,0.0,1.0],
-                scene_rom: [0;1024]
+                scene_rom: [0;MAX_ROM_SIZE]
             },
         }
     }
@@ -249,7 +251,7 @@ impl RayMarcherBackend for ScaledEstimateBackend{
                     UniformDesc::new("elapsed_time", UniformType::Float1),
                     UniformDesc::new("position", UniformType::Float3),
                     UniformDesc::new("rotation", UniformType::Float4),
-                    UniformDesc::new("scene_rom", UniformType::Int1).array(1024)
+                    UniformDesc::new("scene_rom", UniformType::Int1).array(MAX_ROM_SIZE)
                 ],
             }
         }).unwrap_or_else(|e| panic!("Failed to compile scene shader: {}",e));

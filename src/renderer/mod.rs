@@ -11,6 +11,8 @@ pub mod methods;
 pub mod scene;
 pub mod algorithms;
 
+pub const MAX_ROM_SIZE: usize = 3072;
+
 pub struct Renderer<S: Scene, R: RayMarcherBackend, A: App<S, R>>{
     registered_bounding_methods: Vec<(String,DataDeserializer)>,
     registered_sdf_methods: Vec<(String,DataDeserializer)>,
@@ -85,7 +87,7 @@ impl<S: Scene, R: RayMarcherBackend, A: App<S, R>> Renderer<S, R, A> {
         uniform vec3 position;
         uniform vec4 rotation;
 
-        uniform int scene_rom[1024];
+        uniform int scene_rom[3072];
         
         //method definitions
         {0}

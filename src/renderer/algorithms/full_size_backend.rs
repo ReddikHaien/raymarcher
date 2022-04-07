@@ -1,5 +1,7 @@
 use miniquad::{Pipeline, BufferLayout, VertexAttribute, UniformDesc, UniformType, UniformBlockLayout, Shader, Bindings, Buffer, BufferType, ShaderMeta, VertexFormat, PassAction};
 
+use crate::renderer::MAX_ROM_SIZE;
+
 use super::{RayMarcherBackend, VERTS, INDICES, SceneUniformShader};
 
 const VERTEX_SHADER: &'static str = 
@@ -22,7 +24,7 @@ in vec2 f_pos;
 
 out vec4 f_color;
 
-uniform int scene_rom[1024];
+uniform int scene_rom[3072];
 
 uniform float elapsed_time;
 
@@ -61,7 +63,7 @@ impl RayMarcherBackend for FullSizeBackend {
                     UniformDesc::new("elapsed_time", UniformType::Float1),
                     UniformDesc::new("position", UniformType::Float3),
                     UniformDesc::new("rotation", UniformType::Float4),
-                    UniformDesc::new("scene_rom", UniformType::Int1).array(1024)
+                    UniformDesc::new("scene_rom", UniformType::Int1).array(MAX_ROM_SIZE)
                 ],
             }
         }).unwrap_or_else(|e| panic!("Failed to compile scene shader: {}",e));
@@ -117,7 +119,7 @@ impl RayMarcherBackend for FullSizeBackend {
                     UniformDesc::new("elapsed_time", UniformType::Float1),
                     UniformDesc::new("position", UniformType::Float3),
                     UniformDesc::new("rotation", UniformType::Float4),
-                    UniformDesc::new("scene_rom", UniformType::Int1).array(1024)
+                    UniformDesc::new("scene_rom", UniformType::Int1).array(MAX_ROM_SIZE)
                 ],
             }
         }).unwrap_or_else(|e| panic!("Failed to compile scene shader: {}",e));

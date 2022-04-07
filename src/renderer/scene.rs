@@ -82,13 +82,21 @@ impl<'a> SceneSerializer<'a> {
         }
     }
 
+    pub fn has_space_for(&mut self, els: usize) -> bool{
+        self.index + els <= 1024
+    }
+
     pub fn write_value(&mut self, value: u32){
-        self.out[self.index] = value;
-        self.index+=1;
+        if self.has_space_for(1){
+            self.out[self.index] = value;
+            self.index+=1;    
+        }
     }
 
     pub fn write_values(&mut self, value: &[u32]){
-        self.out[self.index..].copy_from_slice(value);
+        if self.has_space_for(value.len()){
+            self.out[self.index..].copy_from_slice(value);
+        }
     }
 }
 
